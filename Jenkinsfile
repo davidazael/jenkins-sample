@@ -11,6 +11,11 @@ pipeline {
    stage('test') {
       steps { 
         echo 'testing application...'
+
+        withPythonEnv('python') {
+            sh 'pip -U install pytest'
+            sh 'pytest -v'
+          }
         }
       }
   stage('deploy') {
