@@ -1,27 +1,18 @@
 pipeline {
+    agent any
 
-  agent any 
-
-  stages {
-    stage('build') {
-      steps { 
-        echo 'building the application...'
+    stages {
+        stage ('build') {
+            agent {
+                docker {
+                    image 'python:3.7-slim-stretch'
+                }
+            }
+            steps {
+                echo 'building the app...'
+                sh 'python3 -m py_compile main.py'
+            }
+            
         }
-      }
-   stage('test') {
-      steps { 
-        echo 'testing application...'
-
-        withPythonEnv('python') {
-            sh 'pip -U install pytest'
-            sh 'pytest -v'
-          }
-        }
-      }
-  stage('deploy') {
-        steps { 
-        echo 'deploying the application'
-          }
-      }
     }
-  }
+}
