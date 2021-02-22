@@ -5,12 +5,13 @@ pipeline {
         }
     }
     stages {
-        
         stage ('SetUp Env') {
-            echo 'Setting up Python VENV...'
-            sh 'python3 -m venv env'
-            sh '. env/bin/activate'
-            sh 'pip install -r requirements.txt'
+            steps {
+                echo 'Setting up Python VENV...'
+                sh 'python3 -m venv env'
+                sh '. env/bin/activate'
+                sh 'pip install -r requirements.txt'
+            }
         }
         
         stage ('build') {
