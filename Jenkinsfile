@@ -1,18 +1,29 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'python:3.7-slim-stretch'
+        }
+    }
     stages {
+        
+        stage ('SetUp Env') {
+            echo 'Setting up Python VENV...'
+            sh 'python3 -m venv env'
+            sh '. env/bin/activate'
+            sh 'pip install -r requirements.txt'
+        }
+        
         stage ('build') {
-            agent {
-                docker {
-                    image 'python:3.7-slim-stretch'
-                }
-            }
             steps {
                 echo 'building the app...'
-                sh 'python3 -m py_compile main.py'
+                sh 'python3 main.py'
             }
-            
+        }
+        stage ('test') {
+            steps {
+                echo 'testing the app...'
+                sh 'pytest -v'
+            }
         }
     }
 }
